@@ -7,6 +7,20 @@
 - Save plots rather than using plt.show()
 - ⚠️ Note: No changes made to demo.ipynb - use demo.py from the console!
 
+----
+## Advanced:
+
+- Use runall.py (type "python runall.py --help"). Will:
+- Batch process images + perform CLIP Surgery in a fully automated way:
+- 1. Gets some CLIP opinions in gradient ascent -> model's own texts (labels) about the images.
+- 2. Performs CLIP Surgery with whatever CLIP "saw" in the images.
+- ⚠️ You can use large models, but from CLIP ViT-L/14 on, will require >24 GB memory. 
+- FUN: After [above], run FUN_word-world-records.py to get a list of CLIP's craziest predicted longwords.
+
+---
+- Original CLIP Gradient Ascent Script: Used with permission by Twitter / X: [@advadnoun](https://twitter.com/advadnoun)
+- CLIP 'opinions' may contain biased rants, slurs, and profanity. For more information, refer to the [CLIP Model Card](https://github.com/openai/CLIP/blob/main/model-card.md).
+
 ------------
 
 # ORIGINAL README.md:
