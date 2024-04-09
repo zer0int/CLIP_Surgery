@@ -1,20 +1,35 @@
 import clip
 import torch
 import cv2
+import os
 import numpy as np
 from PIL import Image
-from  matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 from torchvision.transforms import Compose, Resize, ToTensor, Normalize
 from torchvision.transforms import InterpolationMode
 BICUBIC = InterpolationMode.BICUBIC
 from segment_anything import sam_model_registry, SamPredictor
 
 
+### Select CLIP model here:
+
+clipmodel = "ViT-L/14"
+
+
+### Get CLIP input dims
+
+model_to_dims = {
+    'RN50': 224, 'RN101': 224, 'ViT-B/32': 224, 'ViT-B/16': 224, 'ViT-L/14': 224,
+    'RN50x4': 288, 'RN50x16': 384, 'RN50x64': 448, 'ViT-L/14@336px': 336
+}
+
+input_dims = model_to_dims.get(clipmodel)
+
 ### Init CLIP and data
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model, _ = clip.load("ViT-B/16", device=device)
+model, _ = clip.load(clipmodel, device=device)
 model.eval()
-preprocess =  Compose([Resize((224, 224), interpolation=BICUBIC), ToTensor(),
+preprocess =  Compose([Resize((input_dims, input_dims), interpolation=BICUBIC), ToTensor(),
     Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))])
 
 
@@ -48,11 +63,12 @@ with torch.no_grad():
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP:', all_texts[n])
             plt.imshow(vis)
-            plt.show()
+            #plt.show()
+            plt.savefig("CLIP-result.png")
 
 
 ### Explain CLIP via our CLIP Surgery
-model, preprocess = clip.load("CS-ViT-B/16", device=device)
+model, preprocess = clip.load(f"CS-{clipmodel}", device=device)
 model.eval()
 
 with torch.no_grad():
@@ -78,7 +94,8 @@ with torch.no_grad():
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery:', all_texts[n])
             plt.imshow(vis)
-            plt.show()
+            #plt.show()
+            plt.savefig("CLIP-Surgery.png")
 
 
 ### CLIP Surgery using higher resolution
@@ -111,7 +128,8 @@ with torch.no_grad():
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery 512:', all_texts[n])
             plt.imshow(vis)
-            plt.show()
+            #plt.show()
+            plt.savefig("CLIP-Surgery-512.png")
 
 
 ### CLIP Surgery for a single text, without fixed label sets
@@ -141,7 +159,8 @@ with torch.no_grad():
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery for a single text:', texts[n])
             plt.imshow(vis)
-            plt.show()
+            #plt.show()
+            plt.savefig("CLIP-Surgery-single-text.png")
 
 
 ### Text to points from CLIP Surgery to guide SAM
@@ -183,7 +202,8 @@ with torch.no_grad():
         vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
         print('SAM guided by points from CLIP Surgery:', all_texts[n])
         plt.imshow(vis)
-        plt.show()
+        #plt.show()
+        plt.savefig("SAM-CLIP-Surgery-guided-points.png")
 
     print('Sometimes, the points are accurate, while the masks from SAM still need improvements.')
     print('I mean, some failure cases are not caused by wrong points.')
@@ -220,7 +240,8 @@ with torch.no_grad():
     vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
     print('SAM & CLIP Surgery for single text:', texts[0])
     plt.imshow(vis)
-    plt.show()
+    #plt.show()
+    plt.savefig("SAM-CLIP-Surgery-single-text.png")
 
 
 ### CLIP Surgery + SAM for combined targets
@@ -269,4 +290,5 @@ with torch.no_grad():
     vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
     print('SAM & CLIP Surgery for texts combination:', text)
     plt.imshow(vis)
-    plt.show()
+    #plt.show()
+    plt.savefig("SAM-CLIP-Surgery-texts-combo.png")
