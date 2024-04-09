@@ -4,6 +4,7 @@
 - Small change to clip_model.py to accept this variable
 - In clip.py, bypass SHA256 checksum verification -> You can put your fine-tune in place of .cache/clip/<original_model>.pt
 - Include model.py from OpenAI/clip -> config for fine-tuned torch.save .pt files w/o inbuilt model config
+- Save plots rather than using plt.show()
 - ⚠️ Note: No changes made to demo.ipynb - use demo.py from the console!
 
 ------------
