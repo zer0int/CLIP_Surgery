@@ -62,9 +62,9 @@ with torch.no_grad():
             vis = cv2_img * 0.4 + vis * 0.6
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP:', all_texts[n])
+            plt.title('CLIP:' + all_texts[n])
             plt.imshow(vis)
-            #plt.show()
-            plt.savefig("CLIP-result.png")
+            plt.savefig(f"CLIP-{all_texts[n]}.png")
 
 
 ### Explain CLIP via our CLIP Surgery
@@ -93,9 +93,9 @@ with torch.no_grad():
             vis = cv2_img * 0.4 + vis * 0.6
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery:', all_texts[n])
+            plt.title('CLIP Surgery:' + all_texts[n])
             plt.imshow(vis)
-            #plt.show()
-            plt.savefig("CLIP-Surgery.png")
+            plt.savefig(f"CLIP-Surgery_{all_texts[n]}.png")
 
 
 ### CLIP Surgery using higher resolution
@@ -127,9 +127,9 @@ with torch.no_grad():
             vis = cv2_img * 0.4 + vis * 0.6
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery 512:', all_texts[n])
+            plt.title('CLIP Surgery 512:' + all_texts[n])
             plt.imshow(vis)
-            #plt.show()
-            plt.savefig("CLIP-Surgery-512.png")
+            plt.savefig(f"CLIP-Surgery-512_{all_texts[n]}.png")
 
 
 ### CLIP Surgery for a single text, without fixed label sets
@@ -158,9 +158,9 @@ with torch.no_grad():
             vis = cv2_img * 0.4 + vis * 0.6
             vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
             print('CLIP Surgery for a single text:', texts[n])
+            plt.title('CLIP Surgery for a single text:' + texts[n])
             plt.imshow(vis)
-            #plt.show()
-            plt.savefig("CLIP-Surgery-single-text.png")
+            plt.savefig(f"CLIP-Surgery-single-text_{texts[n]}.png")
 
 
 ### Text to points from CLIP Surgery to guide SAM
@@ -201,9 +201,9 @@ with torch.no_grad():
             cv2.circle(vis, (x, y), 3, (0, 102, 255) if labels[i] == 1 else (255, 102, 51), 3)
         vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
         print('SAM guided by points from CLIP Surgery:', all_texts[n])
+        plt.title('SAM guided by points from CLIP Surgery:' + all_texts[n])
         plt.imshow(vis)
-        #plt.show()
-        plt.savefig("SAM-CLIP-Surgery-guided-points.png")
+        plt.savefig(f"SAM-CLIP-Surgery-guided-points_{all_texts[n]}.png")
 
     print('Sometimes, the points are accurate, while the masks from SAM still need improvements.')
     print('I mean, some failure cases are not caused by wrong points.')
@@ -239,9 +239,9 @@ with torch.no_grad():
         cv2.circle(vis, (x, y), 3, (0, 102, 255) if labels[i] == 1 else (255, 102, 51), 3)
     vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
     print('SAM & CLIP Surgery for single text:', texts[0])
+    plt.title('SAM & CLIP Surgery for single text:' + texts[0])
     plt.imshow(vis)
-    #plt.show()
-    plt.savefig("SAM-CLIP-Surgery-single-text.png")
+    plt.savefig(f"SAM-CLIP-Surgery-single-text_{texts[0]}.png")
 
 
 ### CLIP Surgery + SAM for combined targets
@@ -289,6 +289,6 @@ with torch.no_grad():
         cv2.circle(vis, (x, y), 3, (0, 102, 255) if labels[i] == 1 else (255, 102, 51), 3)
     vis = cv2.cvtColor(vis.astype('uint8'), cv2.COLOR_BGR2RGB)
     print('SAM & CLIP Surgery for texts combination:', text)
+    plt.title('SAM & CLIP Surgery for texts combination:' + text)
     plt.imshow(vis)
-    #plt.show()
-    plt.savefig("SAM-CLIP-Surgery-texts-combo.png")
+    plt.savefig(f"SAM-CLIP-Surgery-texts-combo_{text}.png")
