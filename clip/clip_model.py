@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -110,12 +109,17 @@ class ModifiedResNet(nn.Module):
     - There are now 3 "stem" convolutions as opposed to 1, with an average pool instead of a max pool.
     - Performs anti-aliasing strided convolutions, where an avgpool is prepended to convolutions with stride > 1
     - The final pooling layer is a QKV attention instead of an average pool
-    """
-
-    def __init__(self, layers, output_dim, heads, input_resolution=224, width=64):
+    """    
+    def __init__(self, layers, output_dim, heads, input_resolution=None, width=64):
         super().__init__()
-        self.output_dim = output_dim
+        if input_resolution is None:
+            input_resolution = model_to_dims.get(clipmodel)  # Make sure 'clipmodel' is accessible
         self.input_resolution = input_resolution
+
+    #def __init__(self, layers, output_dim, heads, input_resolution=None, width=64):
+    #    super().__init__()
+    #    self.output_dim = output_dim
+    #    self.input_resolution = input_resolution
 
         # the 3-layer stem
         self.conv1 = nn.Conv2d(3, width // 2, kernel_size=3, stride=2, padding=1, bias=False)
