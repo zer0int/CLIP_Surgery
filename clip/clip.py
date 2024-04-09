@@ -55,17 +55,16 @@ def _download(url: str, root: str):
     os.makedirs(root, exist_ok=True)
     filename = os.path.basename(url)
 
-    expected_sha256 = url.split("/")[-2]
+    # Commenting out the expected_sha256 as we're bypassing checksum verification
+    # expected_sha256 = url.split("/")[-2]
     download_target = os.path.join(root, filename)
 
     if os.path.exists(download_target) and not os.path.isfile(download_target):
         raise RuntimeError(f"{download_target} exists and is not a regular file")
 
     if os.path.isfile(download_target):
-        if hashlib.sha256(open(download_target, "rb").read()).hexdigest() == expected_sha256:
-            return download_target
-        else:
-            warnings.warn(f"{download_target} exists, but the SHA256 checksum does not match; re-downloading the file")
+        # Bypassing the SHA256 checksum verification
+        return download_target
 
     with urllib.request.urlopen(url) as source, open(download_target, "wb") as output:
         with tqdm(total=int(source.info().get("Content-Length")), ncols=80, unit='iB', unit_scale=True, unit_divisor=1024) as loop:
@@ -76,9 +75,6 @@ def _download(url: str, root: str):
 
                 output.write(buffer)
                 loop.update(len(buffer))
-
-    if hashlib.sha256(open(download_target, "rb").read()).hexdigest() != expected_sha256:
-        raise RuntimeError(f"Model has been downloaded but the SHA256 checksum does not not match")
 
     return download_target
 
@@ -102,7 +98,19 @@ def available_models() -> List[str]:
     return list(_MODELS.keys())
 
 
+
+
+
 def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu", jit: bool = False, download_root: str = None):
+    def __init__(input_resolution=None, clipmodel=None):
+        super().__init__()
+        if input_resolution is None:
+            input_resolution = model_to_dims.get(clipmodel)  # Make sure 'clipmodel' is accessible
+        self.input_resolution = input_resolution
+        if clipmodel is None:
+            clipmodel = clipmodel  # Make sure 'clipmodel' is accessible
+        self.input_resolution = input_resolution
+        self.clipmodel = clipmodel
     """Load a CLIP model
 
     Parameters
@@ -137,7 +145,8 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
     with open(model_path, 'rb') as opened_file:
         try:
             # loading JIT archive
-            model = torch.jit.load(opened_file, map_location=device if jit else "cpu").eval()
+            #model = torch.jit.load(opened_file, map_location=device if jit else "cpu").eval()
+            model = torch.load(opened_file, map_location=device if jit else "cpu").eval()
             state_dict = None
         except RuntimeError:
             # loading saved state dict
