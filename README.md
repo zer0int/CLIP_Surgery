@@ -1,3 +1,13 @@
+## Changes:
+
+- Setting e.g. clipmodel = "ViT-L/14@336px" in demo.py now works -> auto input_dims variable
+- Small change to clip_model.py to accept this variable
+- In clip.py, bypass SHA256 checksum verification -> You can put your fine-tune in place of .cache/clip/<original_model>.pt
+- Include model.py from OpenAI/clip -> config for fine-tuned torch.save .pt files w/o inbuilt model config
+
+------------
+
+# ORIGINAL README.md:
 # CLIP Surgery for Better Explainability with Enhancement in Open-Vocabulary Tasks ([arxiv](https://arxiv.org/abs/2304.05653))
 
 ## Introduction
