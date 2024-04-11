@@ -16,10 +16,13 @@
 - 2. Performs CLIP Surgery with whatever CLIP "saw" in the images.
 - ⚠️ You can use large models, but from CLIP ViT-L/14 on, will require >24 GB memory. 
 - FUN: After [above], run FUN_word-world-records.py to get a list of CLIP's craziest predicted longwords.
+- ℹ️ Requires: Original OpenAI/CLIP "pip install git+https://github.com/openai/CLIP.git"
 
 ---
 - Original CLIP Gradient Ascent Script: Used with permission by Twitter / X: [@advadnoun](https://twitter.com/advadnoun)
 - CLIP 'opinions' may contain biased rants, slurs, and profanity. For more information, refer to the [CLIP Model Card](https://github.com/openai/CLIP/blob/main/model-card.md).
+
+![example-github](https://github.com/zer0int/CLIP_Surgery/assets/132047210/e4b4f6ec-8dd5-46a9-8dac-8d5755ef70ea)
 
 ------------
 
